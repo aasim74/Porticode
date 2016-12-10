@@ -22,7 +22,8 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script>
 {
-	
+	var x = "<div></div>";
+	$('#html').append(x);
 	$('#custSubmit').on('click', () => submitCust()); 
 	
 	$('#listSubmit').on('click', () => listCusts());
@@ -50,7 +51,7 @@
 	function listCusts(){
 		api('customers', 'GET', '', (response) => {
 			$('#listemhere').html('');
-			for(let customer of response){
+			for(let customer of response.slice(10)){
 				$('#listemhere').append('<p id="'+customer._id+'">'+customer.first_name+' '+customer.last_name +
 					'<p/><p>'+customer.address.street_number+' '+customer.address.street_name +
 					' '+customer.address.city+', '+customer.address.state+' '+customer.address.zip
@@ -100,15 +101,16 @@
 		}); 
 	}
 	
+	"<div class=\"green\">"
+	
 	function transact(amount, id) {
 		api('accounts/'+id+'/'+((amount>0)?'deposits':'withdrawals'), 'POST', {
 			"medium": "balance",
 			"transaction_date": "2016-11-20",
-			"amount": parseFloat(amount),
+			"amount": parseFloat(Math.abs(amount)),
 			"description": "Hand-built transaction"
 		}, (response) => {
 			console.log(response);
-			listCusts();
 		});
 	}
 	
@@ -121,6 +123,8 @@
 			success: (text)=>response(text)
 		});
 	}
+	
+	listCusts();
 }
 </script>
 
