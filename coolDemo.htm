@@ -1,0 +1,99 @@
+<html>
+<head>
+<title>Joseph's Cool API Demo</title>
+<style>
+	input { display: block; }
+</style>
+</head>
+<body>
+<h3>Create a new Customer</h3>
+<input id="custFName" type="text" placeholder="First Name" /> 
+<input id="custLName" type="text" placeholder="Last Name" /> 
+<input id="custStreetName" type="text" placeholder="Street Name" /> 
+<input id="custStreetNumber" type="text" placeholder="Street Number" /> 
+<input id="custCity" type="text" placeholder="City" /> 
+<input id="custState" type="text" placeholder="State" /> 
+<input id="custZip" type="text" placeholder="Zip" />
+<input id="custSubmit" type="button" value="Submit"/>  
+<h3>List Customers</h3>
+<div id="listemhere"></div>
+<input id="listSubmit" type="button" value="List" />
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script>
+{
+	
+	$('#custSubmit').on('click', () => submitCust()); 
+	
+	$('#listSubmit').on('click', () => listCusts());
+	
+	function submitCust(){
+		api('customers', 'POST', 
+			{
+				'first_name': $('#custFName').val(),
+				'last_name': $('#custLName').val(),
+				'address': {
+					'street_number': $('#custStreetNumber').val(),
+					'street_name': $('#custStreetName').val(),
+					'city': $('#custCity').val(),
+					'state': $('#custState').val(),
+					'zip': $('#custZip').val()
+				}
+			},
+			(resp) => {
+				createAccount(resp.objectCreated._id);
+				listCusts()
+			}
+		);
+	}
+	
+	function listCusts(){
+		api('customers', 'GET', '', (response) => {
+			$('#listemhere').html('');
+			for(let customer of response){
+				$('#listemhere').append('<p id="'+customer._id+'">'+customer.first_name+' '+customer.last_name +
+					'<p/><p>'+customer.address.street_number+' '+customer.address.street_name +
+					' '+customer.address.city+', '+customer.address.state+' '+customer.address.zip
+					+'</p><hr />');
+				listCustBalances(customer._id);
+			}
+		});
+	}
+	
+	function listCustBalances(id){
+		api('customers/'+id+'/accounts','GET','',(response) => {
+			for(let account of response){
+				$('#'+id).append('<p class="balance">'+account.balance+'</p>'
+					+'<input type="text" placeholder="transaction" />'
+					+'<input type="button" value="+" />'
+					+'<input type="button" value="-" />'
+				); 
+			}
+		});
+	}
+	
+	function createAccount(id){
+		api('customers/'+id+'/accounts','POST', {
+			"type":"Credit Card",
+			"rewards":0,
+			"nickname":"auto-created",
+			"balance":500
+		}, (response) => {
+			console.log(response); 
+		}); 
+	}
+	
+	function api(endpoint, method, data, response){
+		$.ajax({
+			url: 'http://api.reimaginebanking.com/'+endpoint+'?key=6021ab09d195f722f7c5619957e8679d',
+			method: method,
+			contentType: 'application/json',
+			data: JSON.stringify(data),
+			success: (text)=>response(text)
+		});
+	}
+}
+</script>
+
+</body>
+</html>
