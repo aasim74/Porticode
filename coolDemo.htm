@@ -30,6 +30,28 @@
 	div.pending {
 		background-color: pink;
 	}
+	
+	div.imageholder {
+    width: 75px;
+    height: 75px;
+    display: flex;
+    align-content: center;
+    background-color: green;
+    align-items: center;
+    justify-content: center;
+	}
+	
+	div.imageholder.green {
+		background-color: green;
+	}
+	
+	div.imageholder.yellow {
+		background-color: yellow;
+	}
+	
+	div.imageholder.red {
+		background-color: red;
+	}
 </style>
 </head>
 <body>
@@ -122,7 +144,9 @@
 			$('#listemhere').append
 				(`<div class="friend">
 					<p>${friend.name}</p>
-					<img class="friend_photo" src="${friend.pic}" />
+					<div class="imageholder">
+						<img class="friend_photo" src="${friend.pic}" />
+					</div>
 					<hr />
 				</div>`);
 			// This Facebook friend might not have a customer ID yet
@@ -194,9 +218,9 @@
 						localStorage.setItem('transact-flags',JSON.stringify(transactFlags));
 					} else {
 						$(`#${id}`).addClass('pending');
-						for(let input of $(`#${id} input`)){
+						registerForAjaxPending(id);
+						for(let input of $(`#${id} input`))
 							$(input).attr('disabled','');
-						}
 					}
 				}
 				
@@ -208,14 +232,13 @@
 					transact(-parseInt($(evt.target).parent().find('.transaction_amount').val()), account._id, id);
 				});
 				
-				console.log(account.balance);
 				if(account.balance>500 ){
-					 console.log("Account balance is above 500 - You have enough money to go out!");
-					 }else if (account.balance<=500){
-						console.log("Youre account balance is under 500");
-						}else if (account.balance<=400){
-						console.log("Youre account balance is under 400");
-						}	
+					$(`#${id} div.imageholder`).addClass('green');
+				} else if (account.balance<=500){
+					$(`#${id} div.imageholder`).addClass('yellow');
+				} else if (account.balance<=400){
+					$(`#${id} div.imageholder`).addClass('red');
+				}	
 			}
 		});
 	}
@@ -246,11 +269,30 @@
 				var transactFlags = {}
 			}
 			transactFlags[custid] = $(`#${custid} p.balance`).text(); 
-			for(let input of $(`#${custid} input`)){
+			for(let input of $(`#${custid} input`))
 				$(input).attr('disabled','');
-			}
 			localStorage.setItem('transact-flags', JSON.stringify(transactFlags));
 			$(`#${custid}`).addClass('pending'); 	
+			registerForAjaxPending(custid);
+		});
+	}
+	
+	function registerForAjaxPending(id){
+		api('customers/'+id+'/accounts', 'GET', {}, (response)=> {
+			if(localStorage.getItem('transact-flags')){
+				var transactFlags = JSON.parse(localStorage.getItem('transact-flags')); 
+			} else {
+				var transactFlags = {}
+			}
+			
+			if(response[0].balance != transactFlags[id]){
+				$(`#${id}`).removeClass('pending');
+				$(`#${id} p.balance`).text(response[0].balance);
+				for(let input of $(`#${id} input`))
+					$(input).removeAttr('disabled');
+			} else {
+				setTimeout(()=>registerForAjaxPending(id), 5000);
+			}
 		});
 	}
 	
