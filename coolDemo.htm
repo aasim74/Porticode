@@ -3,6 +3,33 @@
 <title>Joseph's Cool API Demo</title>
 <style>
 	input { display: block; }
+	input.transaction_add, input.transaction_remove {
+		display: inline-block;
+    width: 5em;
+    height: 2em;
+    font-size: 1.5em;
+	}
+	
+	input.transaction_add {
+		background-color: black;
+    color: yellow;
+	}
+	
+	input.transaction_remove {
+		background-color: yellow;
+    color: black;
+	}
+	
+	input.transaction_amount {
+		font-size: 1.5em;
+		height: 2em;
+		text-align: center;
+		margin-bottom: 1em;
+	}
+	
+	div.pending {
+		background-color: pink;
+	}
 </style>
 </head>
 <body>
@@ -89,6 +116,7 @@
 		let friendos = JSON.parse(localStorage.getItem('frands'));
 		// we only want some
 		friendos = friendos.slice(10); 
+		$('#listemhere').html('');
 		for(let friend of friendos){
 			//render the html
 			$('#listemhere').append
@@ -137,7 +165,7 @@
 	//pull randos from the API that we've created
 	function listGenerics(){
 		api('customers', 'GET', '', (response) => {
-			$('#listemhere').html('');
+		$('#listemhere').html('');
 			for(let customer of response.slice(10)){
 				$('#listemhere').append('<p id="'+customer._id+'">'+customer.first_name+' '+customer.last_name +
 					'<p/><p>'+customer.address.street_number+' '+customer.address.street_name +
@@ -149,21 +177,35 @@
 	}
 	
 	function listCustBalances(id){
+		
 		api('customers/'+id+'/accounts','GET','',(response) => {
 			for(let account of response){
-				$('#'+id).append(
+				$(`#${id} hr`).before(
 					`<p class="balance">${account.balance}</p>
 					<input type="text" class="transaction_amount" placeholder="transaction" />
 					<input type="button" value="+" class="transaction_add" />
 					<input type="button" value="-" class="transaction_remove" />`
 				);  
 				
+				if(localStorage.getItem('transact-flags')){
+					let transactFlags = JSON.parse(localStorage.getItem('transact-flags')); 
+					if(transactFlags[id] != account.balance){
+						transactFlags[id] = undefined; 
+						localStorage.setItem('transact-flags',JSON.stringify(transactFlags));
+					} else {
+						$(`#${id}`).addClass('pending');
+						for(let input of $(`#${id} input`)){
+							$(input).attr('disabled','');
+						}
+					}
+				}
+				
 				$('#'+id).find('.transaction_add').on('click', (evt)=> {
-					transact($(evt.target).parent().find('.transaction_amount').val(), account._id);
+					transact($(evt.target).parent().find('.transaction_amount').val(), account._id, id);
 				});
 				
 				$('#'+id).find('.transaction_remove').on('click', (evt)=> {
-					transact(-parseInt($(evt.target).parent().find('.transaction_amount').val()), account._id);
+					transact(-parseInt($(evt.target).parent().find('.transaction_amount').val()), account._id, id);
 				});
 				
 				console.log(account.balance);
@@ -189,14 +231,26 @@
 		}); 
 	}
 	
-	function transact(amount, id) {
+	function transact(amount, id, custid) {
 		api('accounts/'+id+'/'+((amount>0)?'deposits':'withdrawals'), 'POST', {
 			"medium": "balance",
 			"transaction_date": "2016-11-20",
 			"amount": parseFloat(Math.abs(amount)),
 			"description": "Hand-built transaction"
 		}, (response) => {
-			console.log(response);
+		
+			// detecting whether a transaction is pending
+			if(localStorage.getItem('transact-flags')){
+				var transactFlags = JSON.parse(localStorage.getItem('transact-flags')); 
+			} else {
+				var transactFlags = {}
+			}
+			transactFlags[custid] = $(`#${custid} p.balance`).text(); 
+			for(let input of $(`#${custid} input`)){
+				$(input).attr('disabled','');
+			}
+			localStorage.setItem('transact-flags', JSON.stringify(transactFlags));
+			$(`#${custid}`).addClass('pending'); 	
 		});
 	}
 	
