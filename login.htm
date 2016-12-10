@@ -18,15 +18,31 @@
 		});
   
   	FB.getLoginStatus(function(response) {
-  		console.log('nope');
 		  statusChangeCallback(response);
 		});
   }
   
 	function statusChangeCallback(response){
 		if(response.status == 'connected'){
-			window.location.href = "coolDemo.htm";
-		} else console.log('not logged in'); 
+			scrapeFriends();
+		} else {
+			FB.login(function(response) {
+			scrapeFriends();
+		 }, {scope: 'public_profile,user_friends'});
+		}
+	}
+	
+	function scrapeFriends(callback=function(){window.location.href="coolDemo.htm"}){
+		FB.api(`/me/taggable_friends`,
+			(response) => {
+				let friendz = [];
+				for(let friend of response.data){
+					friendz.push({name: friend.name, pic: friend.picture.data.url}); 
+				}
+				localStorage.setItem('frands', JSON.stringify(friendz));
+				callback();
+			}
+		); 	
 	}
 	
 	init();

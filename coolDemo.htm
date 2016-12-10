@@ -48,7 +48,70 @@
 		);
 	}
 	
+	function quickSubmitCustomer(fname, lname, callback){
+		api('customers','POST',{
+			'first_name':fname,
+			'last_name':lname,
+			'address': {
+				'street_number':'1234',
+				'street_name':'Fake St',
+				'city':'Fakeville',
+				'state':'OH',
+				'zip':'83530'
+			} 
+		}, 
+		(resp) => {
+			createAccount(resp.objectCreated._id, (response)=>{
+				callback(resp.objectCreated._id); 
+			}); 
+		});
+	}
+	
 	function listCusts(){
+		if(localStorage.getItem('frands')){
+			listFriends();
+		} else {
+			listGenerics();
+		}
+	}
+	
+	function listFriends(){
+		let friendos = JSON.parse(localStorage.getItem('frands'));
+		friendos = friendos.slice(10); 
+		for(let friend of friendos){
+			$('#listemhere').append('<div class="friend"><p>'+friend.name +
+					'<p/><img class="friend_photo" src="'+friend.pic+'" /><hr /></div>');
+			let lastP = $('#listemhere div.friend:last-child'); 
+			if(friend.hasOwnProperty('cust_id')){
+				lastP.attr('id',friend.cust_id);
+			} else {
+				quickSubmitCustomer(friend.name.split(' ')[0], friend.name.split(' ')[1],
+					(response)=>{
+						let id = response;
+						lastP.attr('id', id);
+						friend.cust_id = id;
+						localStorage.setItem('frands', JSON.stringify(friendos));
+					});
+			}
+			waitForReady(()=>{
+				//for(let renderedFriend of friendos){
+					listCustBalances(friend.cust_id);
+				//}
+			});
+			
+		}
+	}
+	
+	function waitForReady(cb){
+		if($('div.friend:not([id])').length>0){
+			setTimeout(()=>waitForReady(cb),1000);
+		} else {
+			cb();
+		}
+	}
+	
+	//pull randos from the API that we've created
+	function listGenerics(){
 		api('customers', 'GET', '', (response) => {
 			$('#listemhere').html('');
 			for(let customer of response.slice(10)){
@@ -90,14 +153,14 @@
 		});
 	}
 	
-	function createAccount(id){
+	function createAccount(id, callback=(response)=>{console.log(response)}){
 		api('customers/'+id+'/accounts','POST', {
 			"type":"Checking",
 			"rewards":0,
 			"nickname":"auto-created",
 			"balance":500
 		}, (response) => {
-			console.log(response); 
+			callback(response);
 		}); 
 	}
 	
