@@ -64,10 +64,18 @@
 		api('customers/'+id+'/accounts','GET','',(response) => {
 			for(let account of response){
 				$('#'+id).append('<p class="balance">'+account.balance+'</p>'
-					+'<input type="text" placeholder="transaction" />'
-					+'<input type="button" value="+" />'
-					+'<input type="button" value="-" />'
-				); 
+					+'<input type="text" class="transaction_amount" placeholder="transaction" />'
+					+'<input type="button" value="+" class="transaction_add" />'
+					+'<input type="button" value="-" class="transaction_remove" />'
+				);  
+				
+				$('#'+id).find('.transaction_add').on('click', (evt)=> {
+					transact($(evt.target).parent().find('.transaction_amount').val(), account._id);
+				});
+				
+				$('#'+id).find('.transaction_remove').on('click', (evt)=> {
+					transact(-parseInt($(evt.target).parent().find('.transaction_amount').val()), account._id);
+				});
 				
 				console.log(account.balance);
 				if(account.balance>500 ){
@@ -90,6 +98,18 @@
 		}, (response) => {
 			console.log(response); 
 		}); 
+	}
+	
+	function transact(amount, id) {
+		api('accounts/'+id+'/'+((amount>0)?'deposits':'withdrawals'), 'POST', {
+			"medium": "balance",
+			"transaction_date": "2016-11-20",
+			"amount": parseFloat(amount),
+			"description": "Hand-built transaction"
+		}, (response) => {
+			console.log(response);
+			listCusts();
+		});
 	}
 	
 	function api(endpoint, method, data, response){
