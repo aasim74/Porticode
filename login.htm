@@ -1,0 +1,35 @@
+<html>
+<head>
+<title>Cool Log In</title>
+<script src="//connect.facebook.net/en_US/sdk.js"></script>
+</head>
+<body>
+	<h1>Log In To [NAME HERE]</h1>
+	
+	<script>
+  
+  function init(){
+  	FB.init({
+		  appId      : '1812494202372512',
+		  cookie     : true,  // enable cookies to allow the server to access 
+		                      // the session
+		  xfbml      : true,  // parse social plugins on this page
+		  version    : 'v2.8' // use graph api version 2.8
+		});
+  
+  	FB.getLoginStatus(function(response) {
+  		console.log('nope');
+		  statusChangeCallback(response);
+		});
+  }
+  
+	function statusChangeCallback(response){
+		if(response.status == 'connected'){
+			window.location.href = "coolDemo.htm";
+		} else console.log('not logged in'); 
+	}
+	
+	init();
+	</script>
+</body>
+</html>
