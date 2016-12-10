@@ -68,6 +68,15 @@
 					+'<input type="button" value="+" />'
 					+'<input type="button" value="-" />'
 				); 
+				
+				console.log(account.balance);
+				if(account.balance>500 ){
+					 console.log("Account balance is above 500 - You have enough money to go out!");
+					 }else if (account.balance<=500){
+						console.log("Youre account balance is under 500");
+						}else if (account.balance<=400){
+						console.log("Youre account balance is under 400");
+						}	
 			}
 		});
 	}
