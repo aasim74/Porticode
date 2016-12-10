@@ -24,7 +24,9 @@
   
 	function statusChangeCallback(response){
 		if(response.status == 'connected'){
-			scrapeFriends();
+			if(!localStorage.getItem('frands')){
+				scrapeFriends();
+			} else window.location.href="coolDemo.htm";
 		} else {
 			FB.login(function(response) {
 			scrapeFriends();
@@ -33,8 +35,10 @@
 	}
 	
 	function scrapeFriends(callback=function(){window.location.href="coolDemo.htm"}){
-		FB.api(`/me/taggable_friends`,
+		console.log('hereiam');
+		FB.api('/me/taggable_friends',
 			(response) => {
+				console.log('eh?');
 				let friendz = [];
 				for(let friend of response.data){
 					friendz.push({name: friend.name, pic: friend.picture.data.url}); 

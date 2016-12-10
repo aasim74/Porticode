@@ -22,12 +22,13 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script>
 {
-	var x = "<div></div>";
-	$('#html').append(x);
+
+	// Bind the buttons
 	$('#custSubmit').on('click', () => submitCust()); 
 	
 	$('#listSubmit').on('click', () => listCusts());
 	
+	// Using the HTML Inputs, create a new customer
 	function submitCust(){
 		api('customers', 'POST', 
 			{
@@ -42,13 +43,17 @@
 				}
 			},
 			(resp) => {
+				// They'll need a checing account
 				createAccount(resp.objectCreated._id);
+				// Refresh the listing to show the new account. 
 				listCusts()
 			}
 		);
 	}
 	
+	// We only have a name? No problem
 	function quickSubmitCustomer(fname, lname, callback){
+		// Fudge the address, and simply do not display that stuff later
 		api('customers','POST',{
 			'first_name':fname,
 			'last_name':lname,
@@ -61,12 +66,15 @@
 			} 
 		}, 
 		(resp) => {
+			// Make them a checking account
 			createAccount(resp.objectCreated._id, (response)=>{
+				// pass the customer ID (not the account ID) back out
 				callback(resp.objectCreated._id); 
 			}); 
 		});
 	}
 	
+	// Have we scraped Facebook for friends? Has this been stored?
 	function listCusts(){
 		if(localStorage.getItem('frands')){
 			listFriends();
@@ -75,28 +83,44 @@
 		}
 	}
 	
+	// Display friends from the local storage
+	// These were scraped from Facebook during the login process
 	function listFriends(){
 		let friendos = JSON.parse(localStorage.getItem('frands'));
+		// we only want some
 		friendos = friendos.slice(10); 
 		for(let friend of friendos){
-			$('#listemhere').append('<div class="friend"><p>'+friend.name +
-					'<p/><img class="friend_photo" src="'+friend.pic+'" /><hr /></div>');
+			//render the html
+			$('#listemhere').append
+				(`<div class="friend">
+					<p>${friend.name}</p>
+					<img class="friend_photo" src="${friend.pic}" />
+					<hr />
+				</div>`);
+			// This Facebook friend might not have a customer ID yet
+			// Save a reference to this DOM element if we need to give it an ID later
 			let lastP = $('#listemhere div.friend:last-child'); 
+			// However, the friend may have already been assigned a customer ID
+			// If it has been, we can just give that DOM the id right now
 			if(friend.hasOwnProperty('cust_id')){
 				lastP.attr('id',friend.cust_id);
 			} else {
+				// Hit the API to make a new customer entry
+				// we're just splitting the name by the space in the middle
+				// This is a BAD BAD thing to do, very hostile toward people with 
+				// non-anglo naming schemes, but quick and dirty
 				quickSubmitCustomer(friend.name.split(' ')[0], friend.name.split(' ')[1],
 					(response)=>{
 						let id = response;
 						lastP.attr('id', id);
 						friend.cust_id = id;
+						// yeah, I rewrite localstorage up to 10 times per pageload
+						// much easier than figuring out when the last
 						localStorage.setItem('frands', JSON.stringify(friendos));
 					});
 			}
 			waitForReady(()=>{
-				//for(let renderedFriend of friendos){
 					listCustBalances(friend.cust_id);
-				//}
 			});
 			
 		}
@@ -127,10 +151,11 @@
 	function listCustBalances(id){
 		api('customers/'+id+'/accounts','GET','',(response) => {
 			for(let account of response){
-				$('#'+id).append('<p class="balance">'+account.balance+'</p>'
-					+'<input type="text" class="transaction_amount" placeholder="transaction" />'
-					+'<input type="button" value="+" class="transaction_add" />'
-					+'<input type="button" value="-" class="transaction_remove" />'
+				$('#'+id).append(
+					`<p class="balance">${account.balance}</p>
+					<input type="text" class="transaction_amount" placeholder="transaction" />
+					<input type="button" value="+" class="transaction_add" />
+					<input type="button" value="-" class="transaction_remove" />`
 				);  
 				
 				$('#'+id).find('.transaction_add').on('click', (evt)=> {
@@ -163,8 +188,6 @@
 			callback(response);
 		}); 
 	}
-	
-	"<div class=\"green\">"
 	
 	function transact(amount, id) {
 		api('accounts/'+id+'/'+((amount>0)?'deposits':'withdrawals'), 'POST', {
