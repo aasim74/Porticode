@@ -6,11 +6,10 @@
 -->
 <html>
 	<head>
-		<title>Unnamed Drinking App</title>
+		<title>Banking with Friends</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="stylesheet" href="assets/css/main.css" />
-		
 		<style> 
 			div.friend {
 				background-color: white; 
@@ -52,7 +51,6 @@
 			input.transaction_amount {
 				display: none;
 			}
-
 			
 			p.chatter {
 				font-size: 1.5em;
@@ -81,21 +79,21 @@
 			
 		</style>
 	</head>
+    
 	<body>
-        
-        <a href="#nav">Menu</a>
-
-		<!-- Nav -->
+        <!-- Nav -->
 			<nav id="nav">
 				<ul class="links">
 					<li><a href="index.html">Home</a></li>
 					<li><a href="newcustomers.html">New Customers</a></li>
 					<li><a href="listcustomers.html">List of Customers</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
 				</ul>
 			</nav>
         
 		<!-- Header -->
 			<header id="header" class="alt">
+                <a href="#nav" style="position:absolute;right:10px;top:10px;">Menu</a>
 				<div class="inner">
 					<h1>The Unnamed Website</h1>
 					<p>Banking with friends?</p>
@@ -120,18 +118,15 @@
                     <input id="custSubmit" type="button" value="Submit"/>  
 
 					</section>
-				
-				<section class="main">
-					<div id="listemhere"></div>
-				</section>
-				<!-- Items -->
+					
+					<!-- Items -->
 					<section class="main items">
 						<article class="item">
 							<header>
 								<a href="#"><img src="images/pic01.jpg" alt="" /></a>
-								<h3>What's good?</h3>
+								<h3>What is the Unnamed website?</h3>
 							</header>
-							<p>Not being broke</p>
+							<p>This webpage uses CapitalOne's API to allow the user to manage his bank accounts, budget and let his friends know of how much he has spent from his current budget.</p>
 							<ul class="actions">
 								<li><a href="#" class="button">More</a></li>
 							</ul>
@@ -139,9 +134,9 @@
 						<article class="item">
 							<header>
 								<a href="#"><img src="images/pic02.jpg" alt="" /></a>
-								<h3>How's that?</h3>
+								<h3>Who is it for?</h3>
 							</header>
-							<p>Notice the pretty colors on your friend's icons.</p>
+							<p>Our target market is mainly students. We wanted a platform where budgeting can also be more sociable. This page allows the user to also interact with their friend's budgets too.</p>
 							<ul class="actions">
 								<li><a href="#" class="button">More</a></li>
 							</ul>
@@ -149,9 +144,9 @@
 						<article class="item">
 							<header>
 								<a href="#"><img src="images/pic03.jpg" alt="" /></a>
-								<h3>What're those about?</h3>
+								<h3>How do you use it?</h3>
 							</header>
-							<p>They indicate whether that person is available to go out or whether they'd be better off staying in due to lack of funds.</p>
+							<p>Each user will simply have  a budget, which will reset once a month (on a day of their choosing) and they will have 'indicators' which will let their friends know how much of their budget they have spent for the month.</p>
 							<ul class="actions">
 								<li><a href="#" class="button">More</a></li>
 							</ul>
@@ -159,21 +154,25 @@
 						<article class="item">
 							<header>
 								<a href="#"><img src="images/pic04.jpg" alt="" /></a>
-								<h3>Ipsum sed tempus?</h3>
+								<h3>Item 4</h3>
 							</header>
-							<p>Yes.</p>
+							<p>Too sleepy to come up with something else...</p>
 							<ul class="actions">
 								<li><a href="#" class="button">More</a></li>
 							</ul>
 						</article>
 					</section>
+					
+					<section class="main">
+					<div id="listemhere"></div>
+				</section>
+
+				
 
 				<!-- CTA -->
 					<section id="cta" class="main special">
-						<h2>Add your friends</h2>
-						<p>Facebook handles the friends, you handle the <br />
-						being-too-poor-to-drink-as-much-as-you-do. <br />
-						What're you waiting for?</p>
+						<h2>Try it out!</h2>
+						<p>Click below to get started? ...</p>
 						<ul class="actions">
 							<li><a href="#" class="button big">Get Started</a></li>
 						</ul>
@@ -209,7 +208,8 @@
 			<script src="assets/js/skel.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
-			<script>
+			
+						<script>
 {
 	let povertyLevel = 300;
 	let yellowLevel = 500;
@@ -491,5 +491,6 @@
 	listCusts();
 }
 			</script>
+
 	</body>
 </html>

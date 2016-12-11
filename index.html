@@ -6,26 +6,65 @@
 -->
 <html>
 	<head>
-		<title>Epilogue by TEMPLATED</title>
+		<title>Log In to [Untitled App]</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="stylesheet" href="assets/css/main.css" />
+		<script src="//connect.facebook.net/en_US/sdk.js"></script>
+		
+		<style> 
+			div.friend {
+				background-color: white; 
+				padding: 1em;
+			}
+			
+			div.pending {
+				background-color: pink;
+			}
+	
+			div.imageholder {
+				width: 75px;
+				height: 75px;
+				display: flex;
+				align-content: center;
+				background-color: green;
+				align-items: center;
+				justify-content: center;
+			}
+	
+			div.imageholder.green {
+				background-color: green;
+			}
+	
+			div.imageholder.yellow {
+				background-color: yellow;
+			}
+	
+			div.imageholder.red {
+				background-color: red;
+			}
+	
+			p.balance {
+				display: none; 
+			}
+			
+		</style>
 	</head>
-    
 	<body>
-        <!-- Nav -->
+        
+        <a href="#nav">Menu</a>
+
+		<!-- Nav -->
 			<nav id="nav">
 				<ul class="links">
 					<li><a href="index.html">Home</a></li>
 					<li><a href="newcustomers.html">New Customers</a></li>
 					<li><a href="listcustomers.html">List of Customers</a></li>
-                    <li><a href="contact.html">Contact Us</a></li>
 				</ul>
 			</nav>
         
 		<!-- Header -->
 			<header id="header" class="alt">
-                <a href="#nav" style="position:absolute;right:10px;top:10px;">Menu</a>
 				<div class="inner">
 					<h1>The Unnamed Website</h1>
 					<p>Banking with friends?</p>
@@ -35,104 +74,57 @@
 		<!-- Wrapper -->
 			<div id="wrapper">
 
-				<!-- Banner -->
-					<section id="intro" class="main">
-						<h2>Create a new customer</h2>
-                <form>
-                    <input id="custFName" type="text" placeholder="First Name" /> 
-                    <input id="custLName" type="text" placeholder="Last Name" /> 
-                    <input id="custStreetName" type="text" placeholder="Street Name" /> 
-                    <input id="custStreetNumber" type="text" placeholder="Street Number" /> 
-                    <input id="custCity" type="text" placeholder="City" /> 
-                    <input id="custState" type="text" placeholder="State" /> 
-                    <input id="custZip" type="text" placeholder="Zip" />
-                </form>
-                    <input id="custSubmit" type="button" value="Submit"/>  
-
-					</section>
-
-				<!-- Items -->
-					<section class="main items">
-						<article class="item">
-							<header>
-								<a href="#"><img src="images/pic01.jpg" alt="" /></a>
-								<h3>What is the Unnamed website?</h3>
-							</header>
-							<p>This webpage uses CapitalOne's API to allow the user to manage his bank accounts, budget and let his friends know of how much he has spent from his current budget.</p>
-							<ul class="actions">
-								<li><a href="#" class="button">More</a></li>
-							</ul>
-						</article>
-						<article class="item">
-							<header>
-								<a href="#"><img src="images/pic02.jpg" alt="" /></a>
-								<h3>Who is it for?</h3>
-							</header>
-							<p>Our target market is mainly students. We wanted a platform where budgeting can also be more sociable. This page allows the user to also interact with their friend's budgets too.</p>
-							<ul class="actions">
-								<li><a href="#" class="button">More</a></li>
-							</ul>
-						</article>
-						<article class="item">
-							<header>
-								<a href="#"><img src="images/pic03.jpg" alt="" /></a>
-								<h3>How do you use it?</h3>
-							</header>
-							<p>Each user will simply have  a budget, which will reset once a month (on a day of their choosing) and they will have 'indicators' which will let their friends know how much of their budget they have spent for the month.</p>
-							<ul class="actions">
-								<li><a href="#" class="button">More</a></li>
-							</ul>
-						</article>
-						<article class="item">
-							<header>
-								<a href="#"><img src="images/pic04.jpg" alt="" /></a>
-								<h3>Item 4</h3>
-							</header>
-							<p>Too sleepy to come up with something else...</p>
-							<ul class="actions">
-								<li><a href="#" class="button">More</a></li>
-							</ul>
-						</article>
-					</section>
-
-				<!-- CTA -->
-					<section id="cta" class="main special">
-						<h2>Try it out!</h2>
-						<p>Click below to get started? ...</p>
-						<ul class="actions">
-							<li><a href="#" class="button big">Get Started</a></li>
-						</ul>
-					</section>
-
-				<!-- Main -->
-				<!--
-					<section id="main" class="main">
-						<header>
-							<h2>Lorem ipsum dolor</h2>
-						</header>
-						<p>Fusce malesuada efficitur venenatis. Pellentesque tempor leo sed massa hendrerit hendrerit. In sed feugiat est, eu congue elit. Ut porta magna vel felis sodales vulputate. Donec faucibus dapibus lacus non ornare. Etiam eget neque id metus gravida tristique ac quis erat. Aenean quis aliquet sem. Ut ut elementum sem. Suspendisse eleifend ut est non dapibus. Nulla porta, neque quis pretium sagittis, tortor lacus elementum metus, in imperdiet ante lorem vitae ipsum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Etiam eget neque id metus gravida tristique ac quis erat. Aenean quis aliquet sem. Ut ut elementum sem. Suspendisse eleifend ut est non dapibus. Nulla porta, neque quis pretium sagittis, tortor lacus elementum metus, in imperdiet ante lorem vitae ipsum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
-					</section>
-				-->
-
-				<!-- Footer -->
-					<footer id="footer">
-						<ul class="icons">
-							<li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
-							<li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
-							<li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
-							<li><a href="#" class="icon fa-linkedin"><span class="label">LinkedIn</span></a></li>
-							<li><a href="#" class="icon fa-envelope"><span class="label">Email</span></a></li>
-						</ul>
-						<p class="copyright">&copy; Untitled. Design: <a href="https://templated.co">TEMPLATED</a>. Images: <a href="https://unsplash.com">Unsplash</a>.</p>
-					</footer>
 
 			</div>
 
 		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
+			<!--<script src="assets/js/jquery.min.js"></script>-->
+			<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 			<script src="assets/js/skel.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
-
+			<script>
+  
+  function init(){
+  	FB.init({
+		  appId      : '1812494202372512',
+		  cookie     : true,  // enable cookies to allow the server to access 
+		                      // the session
+		  xfbml      : true,  // parse social plugins on this page
+		  version    : 'v2.8' // use graph api version 2.8
+		});
+  
+  	FB.getLoginStatus(function(response) {
+		  statusChangeCallback(response);
+		});
+  }
+  
+	function statusChangeCallback(response){
+		if(response.status == 'connected'){
+			if(!localStorage.getItem('frands')){
+				scrapeFriends();
+			} else window.location.href="app.html";
+		} else {
+			FB.login(function(response) {
+			scrapeFriends();
+		 }, {scope: 'public_profile,user_friends'});
+		}
+	}
+	
+	function scrapeFriends(callback=function(){window.location.href="app.html"}){
+		FB.api('/me/taggable_friends',
+			(response) => {
+				let friendz = [];
+				for(let friend of response.data){
+					friendz.push({name: friend.name, pic: friend.picture.data.url}); 
+				}
+				localStorage.setItem('frands', JSON.stringify(friendz));
+				callback();
+			}
+		); 	
+	}
+	
+	init();
+	</script>
 	</body>
 </html>
