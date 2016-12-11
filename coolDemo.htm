@@ -24,7 +24,7 @@
 		font-size: 1.5em;
 		height: 2em;
 		text-align: center;
-		margin-bottom: 1em;
+		margin: 1em 0;
 	}
 	
 	div.pending {
@@ -52,6 +52,10 @@
 	div.imageholder.red {
 		background-color: red;
 	}
+	
+	p.balance {
+		display: none; 
+	}
 </style>
 </head>
 <body>
@@ -71,6 +75,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script>
 {
+	let povertyLevel = 300;
+	let yellowLevel = 500;
+
 
 	// Bind the buttons
 	$('#custSubmit').on('click', () => submitCust()); 
@@ -208,7 +215,8 @@
 					`<p class="balance">${account.balance}</p>
 					<input type="text" class="transaction_amount" placeholder="transaction" />
 					<input type="button" value="+" class="transaction_add" />
-					<input type="button" value="-" class="transaction_remove" />`
+					<input type="button" value="-" class="transaction_remove" />
+					<p class="chatter"></p>`
 				);  
 				
 				if(localStorage.getItem('transact-flags')){
@@ -232,15 +240,38 @@
 					transact(-parseInt($(evt.target).parent().find('.transaction_amount').val()), account._id, id);
 				});
 				
-				if(account.balance>500 ){
-					$(`#${id} div.imageholder`).addClass('green');
-				} else if (account.balance<=500){
-					$(`#${id} div.imageholder`).addClass('yellow');
-				} else if (account.balance<=400){
-					$(`#${id} div.imageholder`).addClass('red');
-				}	
+				colorBoxes(id, account.balance);
 			}
 		});
+	}
+	
+	function colorBoxes(id, money){
+		$(`#${id} p.chatter`).text('');
+		$(`#${id} div.imageholder`).attr('class','imageholder');
+		if(money>yellowLevel ){
+			$(`#${id} div.imageholder`).addClass('green');
+		} else if (money>povertyLevel){
+			$(`#${id} div.imageholder`).addClass('yellow');
+		} else {
+			$(`#${id} div.imageholder`).addClass('red');
+			$(`#${id} p.chatter`).text(generateChatter(money));
+		}	
+	}
+	
+	function generateChatter(dollaz){
+		let amountNeeded = yellowLevel - dollaz; 
+		let days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+		let times = ['Morning','Afternoon','Evening','Night','Noon','Midnight'];
+		let day = days[Math.floor(Math.random()*7)];
+		let time = times[Math.floor(Math.random()*6)];
+		let openers = [
+			`I'm going to need all my mates to give me £${amountNeeded} if i'm goinging out on ${day} ${time}.`,
+			`Listen, I'd love to join you on ${day} ${time} but I just can't do it without... Say... £${amountNeeded}?`,
+			`Heyyyy! Let's get faced on ${day} ${time}! Thing is, though, I could really use £${amountNeeded}...`,
+			`Can't drink if I can't eat. Hook me up with £${amountNeeded}?`
+		];
+		
+		return openers[Math.floor(Math.random()*openers.length)];
 	}
 	
 	function createAccount(id, callback=(response)=>{console.log(response)}){
@@ -288,6 +319,7 @@
 			if(response[0].balance != transactFlags[id]){
 				$(`#${id}`).removeClass('pending');
 				$(`#${id} p.balance`).text(response[0].balance);
+				colorBoxes(id, response[0].balance);
 				for(let input of $(`#${id} input`))
 					$(input).removeAttr('disabled');
 			} else {
