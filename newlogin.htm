@@ -103,7 +103,7 @@
 		if(response.status == 'connected'){
 			if(!localStorage.getItem('frands')){
 				scrapeFriends();
-			} else window.location.href="app.html";
+			} else window.location.href="app.htm";
 		} else {
 			FB.login(function(response) {
 			scrapeFriends();
@@ -111,7 +111,7 @@
 		}
 	}
 	
-	function scrapeFriends(callback=function(){window.location.href="app.html"}){
+	function scrapeFriends(callback=function(){window.location.href="app.htm"}){
 		FB.api('/me/taggable_friends',
 			(response) => {
 				let friendz = [];
