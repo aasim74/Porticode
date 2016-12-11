@@ -196,7 +196,7 @@
 	//pull randos from the API that we've created
 	function listGenerics(){
 		api('customers', 'GET', '', (response) => {
-		$('#listemhere').html('');
+			$('#listemhere').html('');
 			for(let customer of response.slice(10)){
 				$('#listemhere').append('<p id="'+customer._id+'">'+customer.first_name+' '+customer.last_name +
 					'<p/><p>'+customer.address.street_number+' '+customer.address.street_name +
@@ -259,6 +259,7 @@
 	}
 	
 	function generateChatter(dollaz){
+		if(Math.round(Math.random())) return '';
 		let amountNeeded = yellowLevel - dollaz; 
 		let days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
 		let times = ['Morning','Afternoon','Evening','Night','Noon','Midnight'];
@@ -279,7 +280,7 @@
 			"type":"Checking",
 			"rewards":0,
 			"nickname":"auto-created",
-			"balance":500
+			"balance": Math.floor(Math.random()*750)
 		}, (response) => {
 			callback(response);
 		}); 

@@ -35,10 +35,8 @@
 	}
 	
 	function scrapeFriends(callback=function(){window.location.href="coolDemo.htm"}){
-		console.log('hereiam');
 		FB.api('/me/taggable_friends',
 			(response) => {
-				console.log('eh?');
 				let friendz = [];
 				for(let friend of response.data){
 					friendz.push({name: friend.name, pic: friend.picture.data.url}); 
