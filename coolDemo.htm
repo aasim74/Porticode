@@ -219,7 +219,7 @@
 					<p class="chatter"></p>`
 				);  
 				
-				if(localStorage.getItem('transact-flags')){
+				if(localStorage.getItem('transac	t-flags')){
 					let transactFlags = JSON.parse(localStorage.getItem('transact-flags')); 
 					if(transactFlags[id] != account.balance){
 						transactFlags[id] = undefined; 
