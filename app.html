@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>Epilogue by TEMPLATED</title>
+		<title>Unnamed Drinking App</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="stylesheet" href="assets/css/main.css" />
@@ -15,6 +15,8 @@
 			div.friend {
 				background-color: white; 
 				padding: 1em;
+				width: 30em;
+				text-align: center;
 			}
 			
 			div.pending {
@@ -53,7 +55,28 @@
 
 			
 			p.chatter {
-				display: inline-block;
+				font-size: 1.5em;
+			}
+			
+			input[type="button"] {
+				min-width: 3em;
+				padding: 0 0.5em;
+			}
+			
+			div.imageholder img {
+				max-width: 50px; 
+				
+			}
+			
+			input.transaction_amount {
+				margin: 1em 0;
+			}
+			
+			#listemhere {
+				display: flex;
+				flex: 1 1 auto;
+				flex-wrap: wrap;
+				justify-content: center;
 			}
 			
 		</style>
@@ -106,9 +129,9 @@
 						<article class="item">
 							<header>
 								<a href="#"><img src="images/pic01.jpg" alt="" /></a>
-								<h3>Feugiat et faucibus</h3>
+								<h3>What's good?</h3>
 							</header>
-							<p>Fusce malesuada efficitur venenatis. Pellentesque tempor leo sed massa hendrerit hendrerit. In sed feugiat est, eu congue elit. Ut porta magna vel felis sodales vulputate. Donec faucibus dapibus lacus non ornare.</p>
+							<p>Not being broke</p>
 							<ul class="actions">
 								<li><a href="#" class="button">More</a></li>
 							</ul>
@@ -116,9 +139,9 @@
 						<article class="item">
 							<header>
 								<a href="#"><img src="images/pic02.jpg" alt="" /></a>
-								<h3>Blandit adipiscing</h3>
+								<h3>How's that?</h3>
 							</header>
-							<p>Fusce malesuada efficitur venenatis. Pellentesque tempor leo sed massa hendrerit hendrerit. In sed feugiat est, eu congue elit. Ut porta magna vel felis sodales vulputate. Donec faucibus dapibus lacus non ornare.</p>
+							<p>Notice the pretty colors on your friend's icons.</p>
 							<ul class="actions">
 								<li><a href="#" class="button">More</a></li>
 							</ul>
@@ -126,9 +149,9 @@
 						<article class="item">
 							<header>
 								<a href="#"><img src="images/pic03.jpg" alt="" /></a>
-								<h3>Lorem massa nulla</h3>
+								<h3>What're those about?</h3>
 							</header>
-							<p>Fusce malesuada efficitur venenatis. Pellentesque tempor leo sed massa hendrerit hendrerit. In sed feugiat est, eu congue elit. Ut porta magna vel felis sodales vulputate. Donec faucibus dapibus lacus non ornare.</p>
+							<p>They indicate whether that person is available to go out or whether they'd be better off staying in due to lack of funds.</p>
 							<ul class="actions">
 								<li><a href="#" class="button">More</a></li>
 							</ul>
@@ -136,9 +159,9 @@
 						<article class="item">
 							<header>
 								<a href="#"><img src="images/pic04.jpg" alt="" /></a>
-								<h3>Ipsum sed tempus</h3>
+								<h3>Ipsum sed tempus?</h3>
 							</header>
-							<p>Fusce malesuada efficitur venenatis. Pellentesque tempor leo sed massa hendrerit hendrerit. In sed feugiat est, eu congue elit. Ut porta magna vel felis sodales vulputate. Donec faucibus dapibus lacus non ornare.</p>
+							<p>Yes.</p>
 							<ul class="actions">
 								<li><a href="#" class="button">More</a></li>
 							</ul>
@@ -147,10 +170,10 @@
 
 				<!-- CTA -->
 					<section id="cta" class="main special">
-						<h2>Etiam veroeros lorem</h2>
-						<p>Phasellus ac augue ac magna auctor tempus proin<br />
-						accumsan lacus a nibh commodo in pellentesque dui<br />
-						in hac habitasse platea dictumst.</p>
+						<h2>Add your friends</h2>
+						<p>Facebook handles the friends, you handle the <br />
+						being-too-poor-to-drink-as-much-as-you-do. <br />
+						What're you waiting for?</p>
 						<ul class="actions">
 							<li><a href="#" class="button big">Get Started</a></li>
 						</ul>
@@ -214,8 +237,13 @@
 			(resp) => {
 				// They'll need a checing account
 				createAccount(resp.objectCreated._id);
+				let storedFriendos = JSON.parse(localStorage.getItem('frands'));
+				if(typeof storedFriendos == 'object'){
+					storedFriendos.push({name: $('#custFName').val() + ' ' + $('#custLName').val(), pic: 'images/facebook-default-no-profile-pic.jpg'});
+					localStorage.setItem('frands', JSON.stringify(storedFriendos));
+				}
 				// Refresh the listing to show the new account. 
-				listCusts()
+				listCusts();
 			}
 		);
 	}
@@ -254,10 +282,10 @@
 	
 	// Display friends from the local storage
 	// These were scraped from Facebook during the login process
-	function listFriends(){
+	function listFriends(){ 
 		let friendos = JSON.parse(localStorage.getItem('frands'));
 		// we only want some
-		friendos = friendos.slice(10); 
+		//friendos = friendos.slice(10); 
 		$('#listemhere').html('');
 		for(let friend of friendos){
 			//render the html
@@ -267,7 +295,6 @@
 					<div class="imageholder">
 						<img class="friend_photo" src="${friend.pic}" />
 					</div>
-					<hr />
 				</div>`);
 			// This Facebook friend might not have a customer ID yet
 			// Save a reference to this DOM element if we need to give it an ID later
@@ -314,7 +341,7 @@
 				$('#listemhere').append('<p id="'+customer._id+'">'+customer.first_name+' '+customer.last_name +
 					'<p/><p>'+customer.address.street_number+' '+customer.address.street_name +
 					' '+customer.address.city+', '+customer.address.state+' '+customer.address.zip
-					+'</p><hr />');
+					+'</p>');
 				listCustBalances(customer._id);
 			}
 		});
@@ -324,7 +351,7 @@
 		
 		api('customers/'+id+'/accounts','GET','',function(response){
 			for(let account of response){
-				$(`#${id} hr`).before(
+				$(`#${id}`).append(
 					`<p class="balance">${account.balance}</p>
 					<input type="text" class="transaction_amount" placeholder="transaction" />
 					<input type="button" value="+" class="transaction_add" />
@@ -344,10 +371,13 @@
 					}
 				}
 				
-				$('#'+id).find('.transaction_add').on('click', (evt)=> {
+				$('#'+id).find('.transaction_add').one('click', (evt)=> {
 					//transact($(evt.target).parent().find('.transaction_amount').val(), account._id, id);
 					$('#'+id).find('.transaction_amount').css('display','block');
 					$(evt.target).attr('value','Send');
+					$('#'+id).find('.transaction_add').on('click', (evt)=> {
+						transact($(evt.target).parent().find('.transaction_amount').val(), account._id, id);
+					});
 				});
 				
 				//$('#'+id).find('.transaction_remove').on('click', (evt)=> {
@@ -380,7 +410,7 @@
 		let day = days[Math.floor(Math.random()*7)];
 		let time = times[Math.floor(Math.random()*6)];
 		let openers = [
-			`I'm going to need all my mates to give me £${amountNeeded} if i'm goinging out on ${day} ${time}.`,
+			`I'm going to need all my mates to give me £${amountNeeded} if i'm going out on ${day} ${time}.`,
 			`Listen, I'd love to join you on ${day} ${time} but I just can't do it without... Say... £${amountNeeded}?`,
 			`Heyyyy! Let's get faced on ${day} ${time}! Thing is, though, I could really use £${amountNeeded}...`,
 			`Can't drink if I can't eat. Hook me up with £${amountNeeded}?`
