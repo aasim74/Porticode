@@ -40,6 +40,19 @@
 				);
 			});
 
+        // Nav.
+			$('#nav')
+				.append('<a href="#nav" class="close"></a>')
+				.appendTo($body)
+				.panel({
+					delay: 500,
+					hideOnClick: true,
+					hideOnSwipe: true,
+					resetScroll: true,
+					resetForms: true,
+					side: 'right'
+				});
+        
 		// Items.
 			$('.item').each(function() {
 
